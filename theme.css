@@ -1,0 +1,161 @@
+/* ──────────────────────────────────────────
+   theme.css — shared theme system
+   light / dark / solarized
+   ────────────────────────────────────────── */
+
+/* ── Light (default) ── */
+:root,
+[data-theme="light"] {
+  --bg: #f5f2e9;
+  --bg-card: #fffdf6;
+  --ink: #1a1a17;
+  --ink-soft: #6b6858;
+  --border: #1a1a17;
+  --border-soft: rgba(30, 28, 20, .25);
+  --accent: #ef6c4d;
+  --accent-text: #241000;
+  --nav-bg: #fffdf6;
+  --nav-hover-bg: #1a1a17;
+  --nav-hover-text: #f5f2e9;
+  --photo-bg: #fff;
+  --switcher-bg: rgba(0, 0, 0, .06);
+  --switcher-hover: rgba(0, 0, 0, .12);
+  --blog-b1: #171713;
+  --blog-b2: #7a4f14;
+  --blog-b3: #1c3d2e;
+}
+
+/* ── Dark ── */
+[data-theme="dark"] {
+  --bg: #141414;
+  --bg-card: #1e1e1e;
+  --ink: #e8e6e0;
+  --ink-soft: #9a978c;
+  --border: #e8e6e0;
+  --border-soft: rgba(232, 230, 224, .2);
+  --accent: #ef6c4d;
+  --accent-text: #fff;
+  --nav-bg: #1e1e1e;
+  --nav-hover-bg: #e8e6e0;
+  --nav-hover-text: #141414;
+  --photo-bg: #1e1e1e;
+  --switcher-bg: rgba(255, 255, 255, .08);
+  --switcher-hover: rgba(255, 255, 255, .15);
+  --blog-b1: #2a2a2a;
+  --blog-b2: #3d2a0a;
+  --blog-b3: #0e2e1f;
+}
+
+/* ── Solarized ── */
+[data-theme="solarized"] {
+  --bg: #fdf6e3;
+  --bg-card: #eee8d5;
+  --ink: #073642;
+  --ink-soft: #586e75;
+  --border: #073642;
+  --border-soft: rgba(7, 54, 66, .2);
+  --accent: #cb4b16;
+  --accent-text: #fdf6e3;
+  --nav-bg: #eee8d5;
+  --nav-hover-bg: #073642;
+  --nav-hover-text: #fdf6e3;
+  --photo-bg: #eee8d5;
+  --switcher-bg: rgba(7, 54, 66, .08);
+  --switcher-hover: rgba(7, 54, 66, .15);
+  --blog-b1: #073642;
+  --blog-b2: #6c4f1a;
+  --blog-b3: #2aa198;
+}
+
+/* ── Transition ── */
+body,
+.hero-nav,
+.hero-nav a,
+.name-frame,
+.cooking-card,
+.photo-rect,
+footer,
+.blog-card,
+.section-label,
+.about-copy,
+.my-name-is,
+.back-link,
+.blog-entry,
+.page-title,
+.page-subtitle,
+.blog-title,
+.blog-subtitle,
+.blog-meta,
+.blog-content p,
+.blog-footer,
+.theme-switcher,
+.theme-btn,
+.contact-card {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+/* ── Theme switcher UI ── */
+.theme-switcher {
+  position: fixed;
+  top: 24px;
+  right: 150px;
+  display: flex;
+  gap: 0;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .12);
+  z-index: 999;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  transition: background .2s ease, color .2s ease;
+  position: relative;
+}
+
+.theme-btn:hover {
+  background: var(--switcher-hover);
+}
+
+.theme-btn.active {
+  background: var(--switcher-bg);
+  color: var(--ink);
+}
+
+.theme-btn+.theme-btn {
+  border-left: 1px solid var(--border-soft);
+}
+
+.theme-btn .tooltip-label {
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'Silkscreen', monospace;
+  font-size: .55rem;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.theme-btn:hover .tooltip-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

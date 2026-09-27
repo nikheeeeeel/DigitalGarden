@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>nik3el</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 40px 24px 110px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 24px 40px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 90vh;
+      overflow: hidden;
+    }
+
+    .weather-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .rainmeter-ui {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .rainmeter-ui label {
+      font-size: 1.2rem;
+      color: var(--ink-soft);
+      user-select: none;
+    }
+
+    .rainmeter-ui input[type="range"] {
+      width: 100px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .pixel-cloud {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--ink-soft);
+      opacity: 0.15;
+      box-shadow:
+        20px 0, 30px 0, 40px 0,
+        10px 10px, 20px 10px, 30px 10px, 40px 10px, 50px 10px,
+        0 20px, 10px 20px, 20px 20px, 30px 20px, 40px 20px, 50px 20px, 60px 20px;
+    }
+
+    .cloud-wrapper {
+      position: absolute;
+      top: var(--t);
+      left: -300px;
+      animation: drift var(--d) linear infinite;
+      animation-delay: var(--del);
+    }
+
+    @keyframes drift {
+      0% {
+        left: -300px;
+      }
+
+      100% {
+        left: calc(100% + 100px);
+      }
+    }
+
+    .bird-flock {
+      position: absolute;
+      left: -100px;
+      z-index: 0;
+    }
+
+    .pixel-bird {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--ink-soft);
+      opacity: 0.65;
+      box-shadow: -8px -4px var(--ink-soft), 8px -4px var(--ink-soft);
+      animation: flap 0.5s steps(2, end) infinite alternate;
+    }
+
+    @keyframes flap {
+      0% {
+        box-shadow: -8px -4px var(--ink-soft), 8px -4px var(--ink-soft);
+      }
+
+      100% {
+        box-shadow: -8px 4px var(--ink-soft), 8px 4px var(--ink-soft);
+      }
+    }
+
+    @keyframes flyAcross {
+      0% {
+        left: -100px;
+      }
+
+      100% {
+        left: calc(100% + 100px);
+      }
+    }
+
+    .rain-drop {
+      position: absolute;
+      width: calc(2px * var(--s, 1));
+      height: calc(20px * var(--s, 1));
+      background: var(--accent);
+      border-radius: 2px;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-30px);
+      }
+
+      100% {
+        transform: translateY(100vh);
+      }
+    }
+
+    .hero>*:not(.weather-layer):not(.rainmeter-ui) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hand {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+    }
+
+    .my-name-is {
+      font-size: 2rem;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+
+    .name-frame {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 2.5px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 44px;
+      margin: 10px 0 24px;
+      transform: rotate(-1deg);
+      background: var(--bg-card);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .04);
+    }
+
+    .name-frame h1 {
+      font-family: 'Silkscreen', monospace;
+      font-size: 4rem;
+      margin: 0;
+      letter-spacing: .04em;
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+      line-height: 1.1;
+    }
+
+    .emoji-float {
+      position: absolute;
+      font-size: 2rem;
+      opacity: .95;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .e1 {
+      top: -22px;
+      left: 4%;
+    }
+
+    .e2 {
+      top: -20px;
+      right: 6%;
+    }
+
+    .e3 {
+      bottom: -20px;
+      left: 8%;
+    }
+
+    .e4 {
+      bottom: -22px;
+      right: 10%;
+    }
+
+    .e5 {
+      top: 32%;
+      left: -24px;
+      font-size: 1.6rem;
+    }
+
+    .e6 {
+      top: 32%;
+      right: -24px;
+      font-size: 1.6rem;
+    }
+
+    .hero-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      width: 100%;
+      max-width: 460px;
+      margin: 0 auto;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--nav-bg);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+    }
+
+    .hero-nav a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 0;
+      font-family: 'Silkscreen', monospace;
+      font-size: .9rem;
+      letter-spacing: .04em;
+      color: var(--ink);
+      text-decoration: none;
+      overflow: hidden;
+      transition: color .25s ease;
+    }
+
+    .hero-nav a+a {
+      border-left: 1.5px solid var(--border);
+    }
+
+    .hero-nav a::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--nav-hover-bg);
+      transform: translateY(100%);
+      transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+      z-index: 0;
+    }
+
+    .hero-nav a:hover::after {
+      transform: translateY(0);
+    }
+
+    .hero-nav a:hover {
+      color: var(--nav-hover-text);
+    }
+
+    .hero-nav a span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin: 64px 0 16px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1.5px;
+      background: var(--border-soft);
+      border-radius: 2px;
+    }
+
+    .about-card {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      width: 100%;
+      padding: 20px 24px 40px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .photo-collage {
+      position: relative;
+      width: 300px;
+      height: 280px;
+      flex-shrink: 0;
+    }
+
+    .bio-img {
+      position: absolute;
+      width: 170px;
+      height: auto;
+      border: 6px solid var(--photo-bg);
+      border-radius: 4px;
+      box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, z-index 0.3s ease;
+    }
+
+    .bio-img.img-1 {
+      top: 10px;
+      left: 10px;
+      transform: rotate(-6deg);
+      z-index: 2;
+    }
+
+    .bio-img.img-2 {
+      bottom: 20px;
+      right: 10px;
+      transform: rotate(8deg);
+      z-index: 1;
+    }
+
+    .bio-img.img-3 {
+      top: 60px;
+      left: 100px;
+      transform: rotate(3deg);
+      z-index: 3;
+    }
+
+    .bio-img.img-1:hover {
+      transform: rotate(-2deg) scale(1.05);
+      z-index: 4;
+    }
+
+    .bio-img.img-2:hover {
+      transform: rotate(4deg) scale(1.05);
+      z-index: 4;
+    }
+
+    .bio-img.img-3:hover {
+      transform: rotate(-1deg) scale(1.05);
+      z-index: 4;
+    }
+
+    .about-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .about-copy {
+      font-family: 'Caveat', cursive;
+      font-size: 1.7rem;
+      line-height: 1.55;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .contact-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px 10px 6px 3px / 8px 3px 10px 5px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Silkscreen', monospace;
+      font-size: .8rem;
+      letter-spacing: .03em;
+      text-decoration: none;
+      box-shadow: 2px 3px 0 rgba(0, 0, 0, .04);
+      transform: rotate(-1deg);
+      transition: transform .2s cubic-bezier(.4, 0, .2, 1), background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .2s ease;
+    }
+
+    .contact-card:nth-child(2) {
+      transform: rotate(1.5deg);
+    }
+
+    .contact-card:nth-child(3) {
+      transform: rotate(-1.5deg);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-2px) rotate(0deg);
+      background: var(--nav-hover-bg);
+      color: var(--nav-hover-text);
+      border-color: var(--nav-hover-bg);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+    }
+
+    .contact-card .contact-icon {
+      flex-shrink: 0;
+      transition: transform .2s ease;
+    }
+
+    .contact-card:hover .contact-icon {
+      transform: scale(1.12);
+    }
+
+    .wall {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 130px;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .wall[hidden] {
+      display: none;
+    }
+
+    .cooking-card {
+      background: var(--bg-card);
+      border: 1.5px dashed var(--border-soft);
+      border-radius: 18px;
+      padding: 48px 24px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
+    }
+
+    .cooking-gif {
+      width: 120px;
+      border-radius: 12px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    .cooking-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 10px 0 4px;
+    }
+
+    .cooking-sub {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .blog-bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .blog-card {
+      position: relative;
+      border-radius: 16px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 190px;
+      overflow: hidden;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+      transition: transform .25s cubic-bezier(.4, 0, .2, 1), box-shadow .25s ease;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
+    }
+
+    .blog-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .blog-card .blog-tag {
+      font-family: 'Silkscreen', monospace;
+      font-size: .62rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .8;
+      color: #fff;
+    }
+
+    .blog-card .blog-arrow {
+      font-size: .95rem;
+      opacity: .6;
+      color: #fff;
+      transform: translate(-2px, 2px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .blog-card:hover .blog-arrow {
+      opacity: 1;
+      transform: translate(2px, -2px);
+    }
+
+    .blog-card-body {
+      margin-top: auto;
+    }
+
+    .blog-card h3 {
+      font-family: 'Silkscreen', monospace;
+      font-size: 1.05rem;
+      margin: 0 0 6px;
+      line-height: 1.35;
+      color: #fff;
+    }
+
+    .blog-card .blog-desc {
+      font-size: .82rem;
+      line-height: 1.4;
+      opacity: .85;
+      margin: 0 0 10px;
+      color: #fff;
+    }
+
+    .blog-card .blog-date {
+      font-size: .72rem;
+      opacity: .65;
+      color: #fff;
+      display: block;
+    }
+
+    .b1 {
+      background: var(--blog-b1);
+    }
+
+    .b2 {
+      background: var(--blog-b2);
+    }
+
+    .b3 {
+      background: var(--blog-b3);
+    }
+
+    footer {
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.25rem;
+      color: var(--ink-soft);
+      margin-top: 80px;
+      opacity: .75;
+    }
+
+    /* Tablet (max-width: 768px) */
+    @media (max-width: 768px) {
+      .wrap {
+        padding: 30px 20px 90px;
+      }
+
+      .hero {
+        min-height: 80vh;
+      }
+
+      .name-frame h1 {
+        font-size: 3rem;
+      }
+
+      .my-name-is {
+        font-size: 1.6rem;
+      }
+
+      .emoji-float {
+        font-size: 1.5rem;
+      }
+
+      .about-card {
+        padding: 10px 12px 20px;
+        gap: 32px;
+      }
+
+      .photo-collage {
+        width: 260px;
+        height: 240px;
+      }
+
+      .bio-img {
+        width: 150px;
+      }
+
+      .about-copy {
+        font-size: 1.5rem;
+      }
+
+      .blog-bento {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .blog-card {
+        min-height: 150px;
+      }
+    }
+
+    /* Mobile (max-width: 580px) */
+    @media (max-width: 580px) {
+      .wrap {
+        padding: 20px 16px 80px;
+      }
+
+      .hero {
+        padding: 20px 16px 16px;
+        min-height: 75vh;
+      }
+
+      .rainmeter-ui {
+        top: 16px;
+        right: 16px;
+        transform: scale(0.8);
+        transform-origin: top right;
+      }
+
+      .my-name-is {
+        font-size: 1.3rem;
+      }
+
+      .name-frame {
+        padding: 10px 26px;
+        margin: 8px 0 18px;
+      }
+
+      .name-frame h1 {
+        font-size: 1.95rem;
+      }
+
+      .emoji-float {
+        font-size: 1.1rem;
+      }
+
+      .e5 {
+        left: -16px;
+        font-size: 1rem;
+      }
+
+      .e6 {
+        right: -16px;
+        font-size: 1rem;
+      }
+
+      .hero-nav {
+        max-width: 100%;
+      }
+
+      .hero-nav a {
+        padding: 12px 0;
+        font-size: .75rem;
+      }
+
+      .section-label {
+        font-size: 1.4rem;
+        margin: 44px 0 12px;
+      }
+
+      .about-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 10px 20px;
+        gap: 24px;
+      }
+
+      .photo-collage {
+        width: 240px;
+        height: 220px;
+        margin: 0 auto;
+      }
+
+      .bio-img {
+        width: 130px;
+      }
+
+      .about-copy {
+        font-size: 1.3rem;
+        text-align: center;
+      }
+
+      .contact-row {
+        justify-content: center;
+      }
+
+      .contact-card {
+        font-size: .65rem;
+        padding: 7px 11px;
+      }
+
+      .cooking-card {
+        padding: 36px 16px;
+      }
+
+      .cooking-gif {
+        width: 100px;
+      }
+
+      .cooking-text {
+        font-size: 1.35rem;
+      }
+
+      .blog-card {
+        padding: 20px 18px;
+        min-height: 140px;
+      }
+
+      .blog-card h3 {
+        font-size: .95rem;
+      }
+
+      footer {
+        margin-top: 60px;
+        font-size: 1.05rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="weather-layer" id="weatherLayer">
+      <div class="cloud-wrapper" style="--t: 15%; --d: 45s; --del: 0s;">
+        <div class="pixel-cloud" style="transform: scale(2.5)"></div>
+      </div>
+      <div class="cloud-wrapper" style="--t: 50%; --d: 65s; --del: -20s;">
+        <div class="pixel-cloud" style="transform: scale(1.5)"></div>
+      </div>
+      <div class="cloud-wrapper" style="--t: 70%; --d: 35s; --del: -10s;">
+        <div class="pixel-cloud" style="transform: scale(3.5)"></div>
+      </div>
+      <div class="cloud-wrapper" style="--t: 25%; --d: 80s; --del: -40s;">
+        <div class="pixel-cloud" style="transform: scale(1.2)"></div>
+      </div>
+    </div>
+    <div class="rainmeter-ui">
+      <label for="rainmeter" class="hand">Rainmeter</label>
+      <input type="range" id="rainmeter" min="0" max="100" value="0">
+    </div>
+    <div class="my-name-is hand">digital space of</div>
+    <div class="name-frame">
+      <span class="emoji-float e1">💻</span>
+      <span class="emoji-float e2">✨</span>
+      <span class="emoji-float e3">📷</span>
+      <span class="emoji-float e4">🌱</span>
+      <span class="emoji-float e5">🧠</span>
+      <span class="emoji-float e6">📝</span>
+      <h1>NIK3EL</h1>
+    </div>
+    <div class="hero-nav">
+      <a href="#about"><span>about</span></a>
+      <a href="projects.html"><span>projects</span></a>
+      <a href="writing.html"><span>writing</span></a>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div id="about" class="section-label">about me!</div>
+    <div class="about-card">
+      <div class="photo-collage">
+        <img src="assets/WhatsApp%20Image%202026-09-27%20at%2011.01.42%20PM.jpeg" alt="Bio photo 1"
+          class="bio-img img-1">
+        <img src="assets/WhatsApp%20Image%202026-09-27%20at%2011.01.43%20PM.jpeg" alt="Bio photo 2"
+          class="bio-img img-2">
+        <img src="assets/WhatsApp%20Image%202026-06-26%20at%2011.49.52%20PM(1).jpeg" alt="Bio photo 3"
+          class="bio-img img-3">
+      </div>
+      <div class="about-col">
+        <p class="about-copy">Heyy, I am Nikhil, a 21 y/o tinkerer that likes to make cool stuff from time to time. I am
+          pretty good with a camera and like to put on my writer hat once in a while as well!</p>
+        <div class="contact-row">
+          <a href="https://www.linkedin.com/in/nikhilkishore-" target="_blank" rel="noopener noreferrer"
+            class="contact-card" aria-label="LinkedIn">
+            <svg class="contact-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+          <a href="https://www.instagram.com/poridgyy/" target="_blank" rel="noopener noreferrer" class="contact-card"
+            aria-label="Instagram">
+            <svg class="contact-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a href="mailto:nik3eeel@gmail.com" class="contact-card" aria-label="Email">
+            <svg class="contact-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>Email</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">project wall</div>
+    <div class="cooking-card" id="projectsCooking">
+      <img src="/assets/cmon.gif" alt="come on" class="dosomething-gif">
+      <p class="cooking-text">something's cooking...</p>
+      <p class="cooking-sub">first projects landing soon</p>
+    </div>
+    <div class="wall" id="projectsGrid" hidden>
+      <!-- project cards go here when ready -->
+    </div>
+
+    <div class="section-label">blogs</div>
+    <div class="blog-bento">
+      <a href="blog-anchor-or-no-anchor.html" class="blog-card b1">
+        <div class="blog-card-top">
+          <span class="blog-tag">musings</span>
+          <span class="blog-arrow">↗</span>
+        </div>
+        <div class="blog-card-body">
+          <h3>Anchor or no anchor?</h3>
+          <p class="blog-desc">Ramblings from a rainy afternoon on purpose and freedom.</p>
+          <span class="blog-date">Aug 2026</span>
+        </div>
+      </a>
+      <a href="blog-spilling-the-tea.html" class="blog-card b2">
+        <div class="blog-card-top">
+          <span class="blog-tag">community</span>
+          <span class="blog-arrow">↗</span>
+        </div>
+        <div class="blog-card-body">
+          <h3>Spilling the tea.</h3>
+          <p class="blog-desc">Building in public — first meetup at FISAT.</p>
+          <span class="blog-date">Aug 2026</span>
+        </div>
+      </a>
+      <a href="blog-the-rains-will-come.html" class="blog-card b3">
+        <div class="blog-card-top">
+          <span class="blog-tag">story</span>
+          <span class="blog-arrow">↗</span>
+        </div>
+        <div class="blog-card-body">
+          <h3>The rains will come.</h3>
+          <p class="blog-desc">From MAKE-A-TON 7.0 to leading TinkerHub.</p>
+          <span class="blog-date">Jul 2026</span>
+        </div>
+      </a>
+    </div>
+
+    <footer>you havent unlocked this part of the map</footer>
+  </div>
+
+  <script>
+    // Flip to true once you have real projects to show
+    const HAS_PROJECTS = false;
+
+    document.getElementById('projectsCooking').hidden = HAS_PROJECTS;
+    document.getElementById('projectsGrid').hidden = !HAS_PROJECTS;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const rainmeter = document.getElementById('rainmeter');
+    const weatherLayer = document.getElementById('weatherLayer');
+    let raindrops = [];
+
+    rainmeter.addEventListener('input', (e) => {
+      const rainIntensity = parseInt(e.target.value);
+      const maxDrops = 150;
+      const targetDrops = Math.floor((rainIntensity / 100) * maxDrops);
+
+      while (raindrops.length < targetDrops) {
+        const drop = document.createElement('div');
+        drop.classList.add('rain-drop');
+        drop.style.left = Math.random() * 100 + '%';
+
+        const duration = 0.6 + Math.random() * 0.4;
+        const delay = Math.random() * 2;
+        drop.style.animationDuration = duration + 's';
+        drop.style.animationDelay = '-' + delay + 's';
+
+        const scale = 0.5 + Math.random() * 0.8;
+        drop.style.setProperty('--s', scale);
+        drop.style.opacity = scale * 0.5;
+
+        weatherLayer.appendChild(drop);
+        raindrops.push(drop);
+      }
+
+      while (raindrops.length > targetDrops) {
+        const drop = raindrops.pop();
+        drop.remove();
+      }
+    });
+
+    // Random birds
+    function spawnBirdFlock() {
+      const flock = document.createElement('div');
+      flock.classList.add('bird-flock');
+
+      flock.style.top = (10 + Math.random() * 40) + '%';
+
+      const numBirds = 3 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < numBirds; i++) {
+        const bird = document.createElement('div');
+        bird.classList.add('pixel-bird');
+        bird.style.top = (Math.random() * 40 - 20) + 'px';
+        bird.style.left = (Math.random() * 80 - 40) + 'px';
+        bird.style.animationDelay = '-' + (Math.random()) + 's';
+        flock.appendChild(bird);
+      }
+
+      weatherLayer.appendChild(flock);
+
+      const duration = 12 + Math.random() * 10;
+      flock.style.animation = `flyAcross ${duration}s linear forwards`;
+
+      setTimeout(() => {
+        flock.remove();
+        scheduleNextFlock();
+      }, duration * 1000);
+    }
+
+    function scheduleNextFlock() {
+      const waitTime = 8000 + Math.random() * 18000;
+      setTimeout(spawnBirdFlock, waitTime);
+    }
+
+    setTimeout(spawnBirdFlock, 3000);
+
+    if (!reduceMotion) {
+      // floating emojis around the name
+      gsap.to(".emoji-float", {
+        y: -8, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut",
+        stagger: { each: 0.3, from: "random" }
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>writing — nik3el</title>
+  <meta name="description" content="Writing by Nikhil — blogs, musings, and stories.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 100px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Silkscreen', monospace;
+      font-size: .75rem;
+      letter-spacing: .04em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      margin-bottom: 36px;
+      transition: color .2s ease, transform .2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--ink);
+      transform: translateX(-3px);
+    }
+
+    .page-title {
+      font-family: 'Silkscreen', monospace;
+      font-size: 2.6rem;
+      margin: 0 0 8px;
+      letter-spacing: .03em;
+      line-height: 1.2;
+    }
+
+    .page-subtitle {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      color: var(--ink-soft);
+      margin: 0 0 44px;
+    }
+
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .blog-entry {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 24px 26px;
+      text-decoration: none;
+      color: var(--ink);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .04);
+      transition: border-color .2s ease, transform .25s cubic-bezier(.4, 0, .2, 1), box-shadow .25s ease;
+    }
+
+    .blog-entry:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .1);
+    }
+
+    .blog-entry-color {
+      width: 6px;
+      min-height: 52px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    .blog-entry-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .blog-entry-tag {
+      font-family: 'Silkscreen', monospace;
+      font-size: .62rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .blog-entry h3 {
+      font-family: 'Silkscreen', monospace;
+      font-size: 1.15rem;
+      margin: 0 0 6px;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .blog-entry-desc {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 0 0 8px;
+    }
+
+    .blog-entry-date {
+      font-size: .75rem;
+      color: var(--ink-soft);
+      opacity: .7;
+    }
+
+    .blog-entry-arrow {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity .2s ease, transform .2s ease;
+      flex-shrink: 0;
+    }
+
+    .blog-entry:hover .blog-entry-arrow {
+      opacity: .9;
+      transform: translate(0, 0);
+    }
+
+    @media (max-width: 580px) {
+      .page-wrap {
+        padding: 24px 16px 80px;
+      }
+
+      .page-title {
+        font-size: 1.85rem;
+      }
+
+      .page-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 32px;
+      }
+
+      .blog-entry {
+        padding: 18px 18px;
+        gap: 14px;
+      }
+
+      .blog-entry h3 {
+        font-size: 1rem;
+      }
+
+      .blog-entry-desc {
+        font-size: .82rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <a href="nik3el — portfolio(1).html" class="back-link">← back to home</a>
+
+    <h1 class="page-title">writing</h1>
+    <p class="page-subtitle">blogs, musings, and stories</p>
+
+    <div class="blog-list">
+      <a href="blog-anchor-or-no-anchor.html" class="blog-entry">
+        <div class="blog-entry-color" style="background: var(--blog-b1);"></div>
+        <div class="blog-entry-content">
+          <div class="blog-entry-tag">musings</div>
+          <h3>Anchor or no anchor?</h3>
+          <p class="blog-entry-desc">Ramblings from a rainy afternoon. On purpose, freedom, and the hypocrisy of the anchor.</p>
+          <span class="blog-entry-date">Aug 22, 2026</span>
+        </div>
+        <span class="blog-entry-arrow">↗</span>
+      </a>
+
+      <a href="blog-spilling-the-tea.html" class="blog-entry">
+        <div class="blog-entry-color" style="background: var(--blog-b2);"></div>
+        <div class="blog-entry-content">
+          <div class="blog-entry-tag">community</div>
+          <h3>Spilling the tea.</h3>
+          <p class="blog-entry-desc">Building in public — organizing the first TinkerHub community meetup at FISAT.</p>
+          <span class="blog-entry-date">Aug 05, 2026</span>
+        </div>
+        <span class="blog-entry-arrow">↗</span>
+      </a>
+
+      <a href="blog-the-rains-will-come.html" class="blog-entry">
+        <div class="blog-entry-color" style="background: var(--blog-b3);"></div>
+        <div class="blog-entry-content">
+          <div class="blog-entry-tag">story</div>
+          <h3>The rains will come.</h3>
+          <p class="blog-entry-desc">From MAKE-A-TON 7.0 to leading TinkerHub at FISAT — a story about influence and belonging.</p>
+          <span class="blog-entry-date">Jul 10, 2026</span>
+        </div>
+        <span class="blog-entry-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</body>
+
+</html>

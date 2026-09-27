@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>projects — nik3el</title>
+  <meta name="description" content="Projects by Nikhil — things I've built and shipped.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 100px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Silkscreen', monospace;
+      font-size: .75rem;
+      letter-spacing: .04em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      margin-bottom: 36px;
+      transition: color .2s ease, transform .2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--ink);
+      transform: translateX(-3px);
+    }
+
+    .page-title {
+      font-family: 'Silkscreen', monospace;
+      font-size: 2.6rem;
+      margin: 0 0 8px;
+      letter-spacing: .03em;
+      line-height: 1.2;
+    }
+
+    .page-subtitle {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      color: var(--ink-soft);
+      margin: 0 0 44px;
+    }
+
+    .cooking-card {
+      background: var(--bg-card);
+      border: 1.5px dashed var(--border-soft);
+      border-radius: 18px;
+      padding: 60px 24px;
+      text-align: center;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
+    }
+
+    .cooking-gif {
+      width: 130px;
+      border-radius: 12px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    .cooking-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 12px 0 4px;
+    }
+
+    .cooking-sub {
+      font-size: .95rem;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    @media (max-width: 580px) {
+      .page-wrap {
+        padding: 24px 16px 80px;
+      }
+
+      .page-title {
+        font-size: 1.85rem;
+      }
+
+      .page-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 32px;
+      }
+
+      .cooking-card {
+        padding: 40px 18px;
+      }
+
+      .cooking-gif {
+        width: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <a href="nik3el — portfolio(1).html" class="back-link">← back to home</a>
+
+    <h1 class="page-title">projects</h1>
+    <p class="page-subtitle">things i've built and shipped</p>
+
+    <div class="cooking-card">
+      <img src="cmon.gif" alt="come on" class="cooking-gif">
+      <p class="cooking-text">something's cooking...</p>
+      <p class="cooking-sub">first projects landing soon</p>
+    </div>
+  </div>
+</body>
+
+</html>
